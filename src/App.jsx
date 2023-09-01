@@ -91,9 +91,8 @@ function App() {
         }
 
         if (visitedCells.length === n*m) {
-            return// distances minimum
+            return Math.min(...distances)
         } else {
-
             moveAlongX = (next_i === end_i) ? 'match' : (next_i < end_i);
             moveAlongY = (next_j === end_j) ? 'match' : (next_j < end_j);
             findSiblingValues(moveAlongX, moveAlongY) //call?
