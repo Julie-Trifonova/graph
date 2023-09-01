@@ -71,14 +71,6 @@ function App() {
         movement ? (ordinate === 'next_i' ? next_j += 1 : next_i += 1)
             : (ordinate === 'next_i' ? next_j -= 1 : next_i -= 1);
         distance += 1
-        // const equalsVisitedCells = visitedCells.filter((item) => item === [next_i, next_j]);
-        // if (equalsVisitedCells.length === 0) {
-        //     visitedCells.push([next_i, next_j])
-        //     distance += 1
-        // } else {
-        //     twiceVisitedCells.push([next_i, next_j])
-        //     distance -= 1
-        // }
         if (visitedCells.filter((item) => item === [next_i, next_j]).length === 0) {
             visitedCells.push([next_i, next_j])
         }
@@ -106,14 +98,6 @@ function App() {
             moveAlongY = (next_j === end_j) ? 'match' : (next_j < end_j);
             findSiblingValues(moveAlongX, moveAlongY) //call?
 
-            // if (moveAlongX = 'match') {
-            //     if (moveAlongY = 'match') {
-            //         return distance;
-            //     } else {
-            //
-            //     }
-            // } else if (moveAlongY = 'match') {
-
             if ((moveAlongX === 'match') && (moveAlongY === 'match')) {
                 distances.push(distance)
                 distance = 0;
@@ -129,7 +113,7 @@ function App() {
                     if (x === 0) {
                         if ((moveAlongX === true)
                             && (visitedCells.filter((item) => item === [next_i, next_j + 1]).length === 0
-                            || (neighborValues[Number(!x)] !== 0)) //findSiblingValues(!moveAlongX_start, !moveAlongY_start) => neighborValues !== [0,0] || visited
+                            || (neighborValues[Number(!x)] !== 0))
                             && [[next_i, next_j + 1]] !== visitedCells.slice(-1))//?
                         {
                             changeCells('next_i', moveAlongX)
@@ -170,22 +154,11 @@ function App() {
                     recursiveDisplacementCalculations(Number(!x))
                 } else {
                     findSiblingValues(!moveAlongX_start, !moveAlongY_start);
-
-                    if ((neighborValues[0] === 0) && (neighborValues[1] === 1)) {
+                    if ((neighborValues[0] === 0) && ([[next_i - 1, next_j]] !== visitedCells.slice(-1))) {
                         moveAlongX = !moveAlongX_start;
                         changeCells('next_i', moveAlongX)
                         recursiveDisplacementCalculations(1)
-                    } else if ((neighborValues[0] === 1) && (neighborValues[1] === 0)) {
-                        moveAlongY = !moveAlongY_start;
-                        changeCells('next_j', moveAlongY)
-                        recursiveDisplacementCalculations(0)
-                    } else if ((neighborValues[0] === 0) && (neighborValues[1] === 0)) {
-                        // neighborValues[0] not visited recursiveDisplacementCalculations(0)
-                        // neighborValues[1] not visited recursiveDisplacementCalculations(1)
-                        if () {
-
-                        }
-
+                    } else if ((neighborValues[1] === 0) && ([[next_i - 1, next_j]] !== visitedCells.slice(-1))) {
                         moveAlongY = !moveAlongY_start;
                         changeCells('next_j', moveAlongY)
                         recursiveDisplacementCalculations(0)
@@ -196,20 +169,6 @@ function App() {
                         next_j = start_j;
                         recursiveDisplacementCalculations(0);
                     }
-
-
-                    // if ((moveAlongX === moveAlongX_start) && (moveAlongY === moveAlongY_start)) {
-                    //     moveAlongX = !moveAlongX_start;
-                    //     recursiveDisplacementCalculations(0)
-                    // } else if ((moveAlongX !== moveAlongX_start) && (moveAlongY === moveAlongY_start)) {
-                    //     moveAlongX = moveAlongX_start;
-                    //     moveAlongY = !moveAlongY_start;
-                    //     recursiveDisplacementCalculations(1)
-                    // } else if ((moveAlongX === moveAlongX_start) && (moveAlongY !== moveAlongY_start)) {
-                    //     moveAlongX = !moveAlongX_start;
-                    //     moveAlongY = moveAlongY_start;
-                    //     recursiveDisplacementCalculations(0)
-                    // }
                 }
             }
         }
