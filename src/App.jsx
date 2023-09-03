@@ -6,148 +6,24 @@ function App() {
     const graph = [[0, 1, 0], [0, 1, 0], [0, 0, 0]]
     const n = 3 //строки
     const m = 3 //столбцы
-
     const start_i = 0;
     const start_j = 0;
     const end_j = 2;
     const end_i = 0;
 
     const neighborValues = [null, null];
-
-    let next_i = start_i;
-    let next_j = start_j;
-    let moveAlongX = '';
-    let moveAlongY = '';
     let distance = 0;
     const visitedCells = []
-
     let distances = [];
-
-    let moveAlongY_start = '';
-    let moveAlongX_start = '';
-
-    const findSiblingValues = (directionX, directionY) => {
-        if (directionX === true) {
-            if ((next_j + 1) > m) {
-                neighborValues[0] = 1;
-            } else {
-                neighborValues[0] = graph[next_i][next_j + 1];
-            }
-        } else if (directionX === false) {
-            if ((next_j - 1) < 0) {
-                neighborValues[0] = 1;
-            } else {
-                neighborValues[0] = graph[next_i][next_j - 1];
-            }
-        }
-
-        if (directionY === true) {
-            if ((next_i + 1) > n) {
-                neighborValues[1] = 1;
-            } else {
-                neighborValues[1] = graph[next_i + 1][next_j];
-            }
-        } else if (directionY === false) {
-            if ((next_i - 1) < 0) {
-                neighborValues[1] = 1;
-            } else {
-                neighborValues[1] = graph[next_i - 1][next_j];
-            }
-        }
-    }
-
-    const changeCells = (ordinate, movement) => {
-        movement ? (ordinate === 'next_i' ? next_j += 1 : next_i += 1)
-            : (ordinate === 'next_i' ? next_j -= 1 : next_i -= 1);
-        distance += 1
-        if (visitedCells.filter((item) => item === [next_i, next_j]).length === 0) {
-            visitedCells.push([next_i, next_j])
-            console.log(visitedCells, visitedCells.slice(-1), visitedCells.slice(-2, -1), 'visitedCells.slice(-1)')
-        }
-    }
-
-    // const findWrongWay = (moveNotAlongX, moveNotAlongY, x) => {
-    //     findSiblingValues(moveNotAlongX, moveNotAlongY);
-    //     console.log(neighborValues, 'step 4')
-    //
-    //     // if ((neighborValues[0] === 0) && ([[next_i - 1, next_j]] !== visitedCells.slice(-1))) {
-    //     //     changeCells('next_i', !moveAlongX)
-    //     //     console.log(next_i, next_j, visitedCells, distance, distances, 'moveAlongX = !moveAlongX_start')
-    //     //     recursiveDisplacementCalculations(1)
-    //     // } else if ((neighborValues[1] === 0) && ([[next_i - 1, next_j]] !== visitedCells.slice(-1))) {
-    //     //     changeCells('next_j', !moveAlongY)
-    //     //     console.log(next_i, next_j, visitedCells, distance, distances, 'moveAlongY = !moveAlongY_start')
-    //     //     recursiveDisplacementCalculations(0)
-    //     // } else {
-    //     //     distances.push(0)
-    //     //     distance = 0;
-    //     //     next_i = start_i;
-    //     //     next_j = start_j;
-    //     //     console.log(next_i, next_j, visitedCells, distances, 'distances.push(0)')
-    //     //     recursiveDisplacementCalculations(0);
-    //     // }
-    //
-    //     if (neighborValues[0] === 0) {
-    //         if ((moveNotAlongX === true)
-    //             && ((visitedCells.filter((item) => item === [next_i, next_j + 1]).length === 0)
-    //                 || (neighborValues[Number(!x)] !== 0))
-    //             && (visitedCells.length > 0 ? (visitedCells.slice(-1)[0][0] !== next_i && visitedCells.slice(-1)[0][1] !== (next_j + 1)) : true)
-    //             && (visitedCells.length > 1 ? (visitedCells.slice(-2, -1)[0][0] !== next_i && visitedCells.slice(-2, -1)[0][1] !== (next_j + 1)) : true)
-    //         ) {
-    //             changeCells('next_i', moveNotAlongX)
-    //             console.log(next_i, next_j, visitedCells, distances, 'change x, true')
-    //             recursiveDisplacementCalculations(1)
-    //         } else if ((moveNotAlongX === false)
-    //             && ((visitedCells.filter((item) => item === [next_i, next_j - 1]).length === 0)
-    //                 || (neighborValues[Number(!x)] !== 0))
-    //             && (visitedCells.length > 0 ? (visitedCells.slice(-1)[0][0] !== next_i && visitedCells.slice(-1)[0][1] !== (next_j - 1)) : true)
-    //             && (visitedCells.length > 1 ? (visitedCells.slice(-2, -1)[0][0] !== next_i && visitedCells.slice(-2, -1)[0][1] !== (next_j - 1)) : true)
-    //         ) {
-    //             changeCells('next_i', moveNotAlongX)
-    //             console.log(next_i, next_j, visitedCells, distances, 'change x, false')
-    //             recursiveDisplacementCalculations(1)
-    //         }
-    //     } else if (neighborValues[1] === 0) {
-    //         if ((moveNotAlongY === true)
-    //             && ((visitedCells.filter((item) => item === [next_i + 1, next_j]).length === 0)
-    //                 || (neighborValues[x] !== 0))
-    //             && (visitedCells.length > 0 ? (visitedCells.slice(-1)[0][0] !== (next_i + 1) && visitedCells.slice(-1)[0][1] !== next_j) : true)
-    //             && (visitedCells.length > 1 ? (visitedCells.slice(-2, -1)[0][0] !== (next_i + 1) && visitedCells.slice(-2, -1)[0][1] !== next_j) : true)
-    //         ) {
-    //             changeCells('next_j', moveNotAlongY)
-    //             console.log(next_i, next_j, [next_i + 1, next_j], visitedCells, distance, distances, 'change y, true')
-    //             recursiveDisplacementCalculations(0)
-    //         } else if ((moveNotAlongY === false)
-    //             && ((visitedCells.filter((item) => item === [next_i - 1, next_j]).length === 0)
-    //                 || (neighborValues[x] !== 0))
-    //             && (visitedCells.length > 0 ? (visitedCells.slice(-1)[0][0] !== (next_i - 1) && visitedCells.slice(-1)[0][1] !== next_j) : true)
-    //             && (visitedCells.length > 1 ? (visitedCells.slice(-2, -1)[0][0] !== (next_i - 1) && visitedCells.slice(-2, -1)[0][1] !== next_j) : true)
-    //         ) {
-    //             changeCells('next_j', moveNotAlongY)
-    //             console.log(next_i, next_j, visitedCells, distances, visitedCells.slice(-1), 'change y, false')
-    //             recursiveDisplacementCalculations(0)
-    //         }
-    //     } else {
-    //         distances.push(0)
-    //         distance = 0;
-    //         next_i = start_i;
-    //         next_j = start_j;
-    //         console.log(next_i, next_j, visitedCells, distances, 'distances.push(0)')
-    //         recursiveDisplacementCalculations(0);
-    //     }
-    // }
-
     const blockElements = [];
     graph.map((a) => a.map((b) => b === 1 ? blockElements.push(b) : ''))
-    console.log(blockElements, 'blockElements')
 
-    // recursiveDisplacementCalculations(x, moveAlongX, moveAlongY, );
-    const findMoveAlongXY = (x) => {
-        moveAlongY_start = (next_i === end_i) ? 'match' : (next_i < end_i);
-        moveAlongX_start = (next_j === end_j) ? 'match' : (next_j < end_j);
+    function findMoveAlongXY (x, next_i, next_j) {
+        let moveAlongY_start = (next_i === end_i) ? 'match' : (next_i < end_i);
+        let moveAlongX_start = (next_j === end_j) ? 'match' : (next_j < end_j);
 
-        moveAlongX = moveAlongX_start;
-        moveAlongY = moveAlongY_start;
+        let moveAlongX = moveAlongX_start;
+        let moveAlongY = moveAlongY_start;
 
         if (visitedCells.length === (n * m - blockElements.length)) {
             return Math.min(...distances)
@@ -155,106 +31,110 @@ function App() {
         } else if ((moveAlongX === 'match') && (moveAlongY === 'match')) {
             distances.push(distance)
             distance = 0;
-            next_i = start_i;
-            next_j = start_j;
             console.log(distances, 'match, push distance')
-            findMoveAlongXY()
+            findMoveAlongXY(0, start_i, start_j)
         } else if ((moveAlongX === 'match') && (moveAlongY !== 'match')) {
             moveAlongX = true;
-            recursiveDisplacementCalculations(x, moveAlongX, moveAlongY);
+            recursiveDisplacementCalculations(x, moveAlongX, moveAlongY, next_i, next_j, true);
         } else if ((moveAlongX !== 'match') && (moveAlongY === 'match')) {
             moveAlongY = true;
-            recursiveDisplacementCalculations(x, moveAlongX, moveAlongY);
+            recursiveDisplacementCalculations(x, moveAlongX, moveAlongY, next_i, next_j, true);
         }
     }
 
-    const recursiveDisplacementCalculations = (x, moveAlongX, moveAlongY) => {
-        findSiblingValues(moveAlongX, moveAlongY)
+    function recursiveDisplacementCalculations (x, moveAlongX, moveAlongY, next_i, next_j, direction) {
+        if (direction !== true) {
+            moveAlongX = !moveAlongX;
+            moveAlongY = !moveAlongY;
+        }
 
-        // moveAlongY = (next_i === end_i) ? 'match' : (next_i < end_i);
-        // moveAlongX = (next_j === end_j) ? 'match' : (next_j < end_j);
-        // findMoveAlongXY()
-        // if ((moveAlongX === 'match') && (moveAlongY === 'match')) {
-        //     distances.push(distance)
-        //     distance = 0;
-        //     next_i = start_i;
-        //     next_j = start_j;
-        //     console.log(distances, 'match, push distance')
-        //     recursiveDisplacementCalculations(0);
-        // }
-        // if ((moveAlongX === 'match') && (moveAlongY !== 'match')) {
-        //     moveAlongX = true;
-        // } else if ((moveAlongX !== 'match') && (moveAlongY === 'match')) {
-        //     moveAlongY = true;
-        // }
-        // findSiblingValues(moveAlongX, moveAlongY)
+        const findSiblingValues = (directionX, directionY) => {
+            if (directionX === true) {
+                if ((next_j + 1) > m) {
+                    neighborValues[0] = 1;
+                } else {
+                    neighborValues[0] = graph[next_i][next_j + 1];
+                }
+            } else if (directionX === false) {
+                if ((next_j - 1) < 0) {
+                    neighborValues[0] = 1;
+                } else {
+                    neighborValues[0] = graph[next_i][next_j - 1];
+                }
+            }
+
+            if (directionY === true) {
+                if ((next_i + 1) > n) {
+                    neighborValues[1] = 1;
+                } else {
+                    neighborValues[1] = graph[next_i + 1][next_j];
+                }
+            } else if (directionY === false) {
+                if ((next_i - 1) < 0) {
+                    neighborValues[1] = 1;
+                } else {
+                    neighborValues[1] = graph[next_i - 1][next_j];
+                }
+            }
+        }
+        findSiblingValues(moveAlongX, moveAlongY)
+        const changeCells = (ordinate, movement) => {
+            movement ? (ordinate === 'next_i' ? next_j += 1 : next_i += 1)
+                : (ordinate === 'next_i' ? next_j -= 1 : next_i -= 1);
+            distance += 1
+            if (visitedCells.filter((item) => item === [next_i, next_j]).length === 0) {
+                visitedCells.push([next_i, next_j])
+                console.log(visitedCells, visitedCells.slice(-1), visitedCells.slice(-2, -1), 'visitedCells.slice(-1)')
+            }
+        }
         console.log(x, moveAlongX, moveAlongY, neighborValues, 'step 1')
+
         if (neighborValues[x] === 0) {
             if (x === 0) {
-                if ((moveAlongX === true)
-                    && ((visitedCells.filter((item) => item === [next_i, next_j + 1]).length === 0)
-                        || (neighborValues[Number(!x)] !== 0))
-                    && (visitedCells.length > 0 ? (visitedCells.slice(-1)[0][0] !== next_i && visitedCells.slice(-1)[0][1] !== (next_j + 1)) : true)
-                    && (visitedCells.length > 1 ? (visitedCells.slice(-2, -1)[0][0] !== next_i && visitedCells.slice(-2, -1)[0][1] !== (next_j + 1)) : true)
-                ) {
+                if ((moveAlongX === true) && ((visitedCells.filter((item) => item === [next_i, next_j + 1]).length === 0) || (neighborValues[Number(!x)] !== 0)) && (visitedCells.length > 0 ? (visitedCells.slice(-1)[0][0] !== next_i && visitedCells.slice(-1)[0][1] !== (next_j + 1)) : true) && (visitedCells.length > 1 ? (visitedCells.slice(-2, -1)[0][0] !== next_i && visitedCells.slice(-2, -1)[0][1] !== (next_j + 1)) : true)) {
                     changeCells('next_i', moveAlongX)
                     console.log(next_i, next_j, visitedCells, distances, 'change x, true')
-                    findMoveAlongXY(Number(!x))
-                } else if ((moveAlongX === false)
-                    && ((visitedCells.filter((item) => item === [next_i, next_j - 1]).length === 0)
-                        || (neighborValues[Number(!x)] !== 0))
-                    && (visitedCells.length > 0 ? (visitedCells.slice(-1)[0][0] !== next_i && visitedCells.slice(-1)[0][1] !== (next_j - 1)) : true)
-                    && (visitedCells.length > 1 ? (visitedCells.slice(-2, -1)[0][0] !== next_i && visitedCells.slice(-2, -1)[0][1] !== (next_j - 1)) : true)
-                ) {
+                    findMoveAlongXY(Number(!x), next_i, next_j)
+                } else if ((moveAlongX === false) && ((visitedCells.filter((item) => item === [next_i, next_j - 1]).length === 0) || (neighborValues[Number(!x)] !== 0)) && (visitedCells.length > 0 ? (visitedCells.slice(-1)[0][0] !== next_i && visitedCells.slice(-1)[0][1] !== (next_j - 1)) : true) && (visitedCells.length > 1 ? (visitedCells.slice(-2, -1)[0][0] !== next_i && visitedCells.slice(-2, -1)[0][1] !== (next_j - 1)) : true)) {
                     changeCells('next_i', moveAlongX)
                     console.log(next_i, next_j, visitedCells, distances, 'change x, false')
-                    findMoveAlongXY(Number(!x))
+                    findMoveAlongXY(Number(!x), next_i, next_j)
                 } else {
-                    if(moveAlongX === moveAlongX_start && moveAlongY === moveAlongY_start) {
+                    if(!!direction) {
                         console.log('findWrongWay, x===0')
-                        recursiveDisplacementCalculations(0, !moveAlongX, !moveAlongY);
+                        recursiveDisplacementCalculations(0, moveAlongX, moveAlongY, next_i, next_j, false);
                     }
                 }
             } else if (x === 1) {
-                if ((moveAlongY === true)
-                    && ((visitedCells.filter((item) => item === [next_i + 1, next_j]).length === 0)
-                        || (neighborValues[x] !== 0))
-                    && (visitedCells.length > 0 ? (visitedCells.slice(-1)[0][0] !== (next_i + 1) && visitedCells.slice(-1)[0][1] !== next_j) : true)
-                    && (visitedCells.length > 1 ? (visitedCells.slice(-2, -1)[0][0] !== (next_i + 1) && visitedCells.slice(-2, -1)[0][1] !== next_j) : true)
-                ) {
+                if ((moveAlongY === true) && ((visitedCells.filter((item) => item === [next_i + 1, next_j]).length === 0) || (neighborValues[x] !== 0)) && (visitedCells.length > 0 ? (visitedCells.slice(-1)[0][0] !== (next_i + 1) && visitedCells.slice(-1)[0][1] !== next_j) : true) && (visitedCells.length > 1 ? (visitedCells.slice(-2, -1)[0][0] !== (next_i + 1) && visitedCells.slice(-2, -1)[0][1] !== next_j) : true)) {
                     changeCells('next_j', moveAlongY)
                     console.log(next_i, next_j, [next_i + 1, next_j], visitedCells, distance, distances, 'change y, true')
-                    findMoveAlongXY(0)
-                } else if ((moveAlongY === false)
-                    && ((visitedCells.filter((item) => item === [next_i - 1, next_j]).length === 0)
-                        || (neighborValues[x] !== 0))
-                    && (visitedCells.length > 0 ? (visitedCells.slice(-1)[0][0] !== (next_i - 1) && visitedCells.slice(-1)[0][1] !== next_j) : true)
-                    && (visitedCells.length > 1 ? (visitedCells.slice(-2, -1)[0][0] !== (next_i - 1) && visitedCells.slice(-2, -1)[0][1] !== next_j) : true)
-                ) {
+                    findMoveAlongXY(0, next_i, next_j)
+                } else if ((moveAlongY === false) && ((visitedCells.filter((item) => item === [next_i - 1, next_j]).length === 0) || (neighborValues[x] !== 0)) && (visitedCells.length > 0 ? (visitedCells.slice(-1)[0][0] !== (next_i - 1) && visitedCells.slice(-1)[0][1] !== next_j) : true) && (visitedCells.length > 1 ? (visitedCells.slice(-2, -1)[0][0] !== (next_i - 1) && visitedCells.slice(-2, -1)[0][1] !== next_j) : true)) {
                     changeCells('next_j', moveAlongY)
                     console.log(next_i, next_j, visitedCells, distances, visitedCells.slice(-1), 'change y, false')
-                    findMoveAlongXY(0)
+                    findMoveAlongXY(0, next_i, next_j)
                 } else {
-                    if (moveAlongX === moveAlongX_start && moveAlongY === moveAlongY_start) {
+                    if (!!direction) {
                         console.log('findWrongWay, x===1')
-                        recursiveDisplacementCalculations(0, !moveAlongX, !moveAlongY);
+                        return recursiveDisplacementCalculations(0, moveAlongX, moveAlongY, next_i, next_j, false);
                     }
                 }
             }
         } else if (neighborValues[Number(!x)] === 0) {
-            recursiveDisplacementCalculations(Number(!x), moveAlongX, moveAlongY);
-            console.log(neighborValues[Number(!x)], 'recursiveDisplacementCalculations(Number(!x)), step 3')
+            recursiveDisplacementCalculations(Number(!x), moveAlongX, moveAlongY, next_i, next_j, true);
+            console.log('step 3')
         } else {
-            if (moveAlongX !== moveAlongX_start && moveAlongY !== moveAlongY_start) {
-                findMoveAlongXY(0)
+            if (!direction) {
+                findMoveAlongXY(0, next_i, next_j)
             } else {
                 console.log('findWrongWay')
-                recursiveDisplacementCalculations(0, !moveAlongX, !moveAlongY);
+                recursiveDisplacementCalculations(0, moveAlongX, moveAlongY, next_i, next_j, false);
             }
         }
     }
 
-    findMoveAlongXY(0)
+    findMoveAlongXY(0, start_i, start_j)
     return (
         <div className="App">
             k
